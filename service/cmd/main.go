@@ -31,7 +31,9 @@ func main() {
 
 	// run migrations
 	log.Println("Running data migrations...")
-	app.Repo.RunMigrations()
+	if err := app.Repo.RunMigrations(); err != nil {
+		log.Fatal("Error running migrations: ", err)
+	}
 
 	http.HandleFunc("/buckets", app.UploadBucket)
 	http.HandleFunc("/events", app.UploadEvent)
