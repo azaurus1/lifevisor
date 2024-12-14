@@ -2,9 +2,6 @@
 
 ![image](https://github.com/user-attachments/assets/4db0d42b-9161-4476-9991-e97b6b5988fa)
 
-
-Here’s an updated README draft with the details we discussed:  
-
 ---
 
 # **Lifevisor**
