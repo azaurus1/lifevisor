@@ -1,6 +1,7 @@
 # lifevisor
 
-![diagram-export-13-12-2024-9_16_06-pm](https://github.com/user-attachments/assets/63e9a5fa-831a-4210-852d-160ade713ecb)
+![image](https://github.com/user-attachments/assets/4db0d42b-9161-4476-9991-e97b6b5988fa)
+
 
 Here’s an updated README draft with the details we discussed:  
 
