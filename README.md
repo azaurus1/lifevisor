@@ -18,17 +18,6 @@
 ---
 
 ## **Getting Started**
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/aza/lifevisor.git
-   ```
-2. Set up the PostgreSQL database and Metabase instance.
-3. Install and configure ActivityWatch to sync data.
-4. Start the Lifevisor platform and begin exploring your screentime insights.
-
----
-
-## **Getting Started**
 
 ### **Prerequisites**
 - [Go](https://go.dev/doc/install): Ensure Go is installed on your system.
