@@ -20,7 +20,12 @@ var syncCmd = &cobra.Command{
 	Short: "Sync activity watch data by interval",
 	Args:  cobra.MaximumNArgs(4), // Four arguments: dbtype, source-path, connection-string, interval
 	Run: func(cmd *cobra.Command, args []string) {
-		// Use Config
+		var dbType string
+		var sourcePath string
+		var connString string
+		var intervalString string
+
+		// Config
 		configFile, _ := cmd.Flags().GetString("config")
 		if configFile != "" {
 			// using config
@@ -29,12 +34,12 @@ var syncCmd = &cobra.Command{
 			if err != nil {
 				log.Println("error reading config: ", err)
 			}
-		}
 
-		dbType := getArgsOrConfig(args, 0, "dbType")
-		sourcePath := getArgsOrConfig(args, 1, "sourcePath")
-		connString := getArgsOrConfig(args, 2, "connString")
-		intervalString := getArgsOrConfig(args, 3, "interval")
+			dbType = viper.GetString("dbType")
+			sourcePath = viper.GetString("sourcePath")
+			connString = viper.GetString("connString")
+			intervalString = viper.GetString("interval")
+		}
 
 		interval, err := strconv.Atoi(intervalString)
 		if err != nil {
@@ -57,6 +62,11 @@ var syncCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(syncCmd)
+	syncCmd.Flags().String("db-type", "", "Database type (optional)")
+	syncCmd.Flags().String("source-path", "", "Source path (optional)")
+	syncCmd.Flags().String("conn-string", "", "Connection string (optional)")
+	syncCmd.Flags().String("interval", "", "Sync Interval (optional)")
+	syncCmd.Flags().String("config", "", "Path to the configuration file (optional)")
 }
 
 func Sync(dbType, sourcePath, connString string, interval int, isHTTP bool) error {
@@ -76,11 +86,4 @@ func Sync(dbType, sourcePath, connString string, interval int, isHTTP bool) erro
 	}
 
 	return nil
-}
-
-func getArgsOrConfig(args []string, index int, configKey string) string {
-	if len(args) > index {
-		return args[index]
-	}
-	return viper.GetString(configKey)
 }
