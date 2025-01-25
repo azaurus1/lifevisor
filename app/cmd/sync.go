@@ -10,6 +10,7 @@ import (
 	"github.com/azaurus1/lifevisor/internal/direct"
 	"github.com/azaurus1/lifevisor/internal/http"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // this will be the scheduled task
@@ -17,12 +18,25 @@ import (
 var syncCmd = &cobra.Command{
 	Use:   "sync [dbtype] [source-path] [connection-string] [interval]",
 	Short: "Sync activity watch data by interval",
-	Args:  cobra.ExactArgs(4), // Four arguments: dbtype, source-path, connection-string, interval
+	Args:  cobra.MaximumNArgs(4), // Four arguments: dbtype, source-path, connection-string, interval
 	Run: func(cmd *cobra.Command, args []string) {
-		dbType := args[0]
-		sourcePath := args[1]
-		connString := args[2]
-		interval, err := strconv.Atoi(args[3])
+		// Use Config
+		configFile, _ := cmd.Flags().GetString("config")
+		if configFile != "" {
+			// using config
+			viper.SetConfigFile(configFile)
+			err := viper.ReadInConfig()
+			if err != nil {
+				log.Println("error reading config: ", err)
+			}
+		}
+
+		dbType := getArgsOrConfig(args, 0, "dbType")
+		sourcePath := getArgsOrConfig(args, 1, "sourcePath")
+		connString := getArgsOrConfig(args, 2, "connString")
+		intervalString := getArgsOrConfig(args, 3, "interval")
+
+		interval, err := strconv.Atoi(intervalString)
 		if err != nil {
 			log.Fatal("cannot convert interval to int: ", err)
 		}
@@ -62,4 +76,11 @@ func Sync(dbType, sourcePath, connString string, interval int, isHTTP bool) erro
 	}
 
 	return nil
+}
+
+func getArgsOrConfig(args []string, index int, configKey string) string {
+	if len(args) > index {
+		return args[index]
+	}
+	return viper.GetString(configKey)
 }
