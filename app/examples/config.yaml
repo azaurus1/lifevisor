@@ -1,0 +1,4 @@
+dbType: pg
+sourcePath: source
+connString: conn
+interval: 5
